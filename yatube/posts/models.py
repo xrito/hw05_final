@@ -67,11 +67,11 @@ class Comment(models.Model):
     created = models.DateTimeField(
         auto_now_add=True, verbose_name='Дата публикации коментария')
 
-    def __str__(self):
-        return self.text
-
     class Meta:
         ordering = ['-created']
+
+    def __str__(self):
+        return self.text
 
 
 class Follow(models.Model):

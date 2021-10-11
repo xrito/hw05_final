@@ -24,7 +24,7 @@ class PostModelTest(TestCase):
     def test_models_have_correct_object_names(self):
         post = PostModelTest.post
         expected_object_name = post.text[:15]
-        self.assertEquals(expected_object_name, str(post))
+        self.assertEqual(expected_object_name, str(post))
 
     def test_object_name_is_title_fild(self):
         group = PostModelTest.group
