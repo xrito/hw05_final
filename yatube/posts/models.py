@@ -29,15 +29,14 @@ class Post(models.Model):
         'Картинка',
         upload_to='posts/',
         blank=True,
-        # null=True,
         help_text='Загрузите картинку'
     )
 
-    def __str__(self):
-        return self.text
-
     class Meta:
         ordering = ['-pub_date']
+
+    def __str__(self):
+        return self.text
 
 
 class Group(models.Model):

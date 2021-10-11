@@ -58,11 +58,10 @@ def post_edit(request, post_id):
                     files=request.FILES or None,
                     instance=post
                     )
-    if request.method == "POST":
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('posts:post_detail', post_id=post_id)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.save()
+        return redirect('posts:post_detail', post_id=post_id)
     context = {
         'form': form,
         'post': post,

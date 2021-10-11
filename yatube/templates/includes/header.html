@@ -1,9 +1,9 @@
 {% load static %}
 <nav class="navbar navbar-light" style="background-color: lightskyblue">
-<style>
+  <style>
     .nav-item {
-      display: inline-block; 
-      font-size: 20px; 
+      display: inline-block;
+      font-size: 20px;
       font-family: sans-serif;
     }
   </style>
@@ -12,48 +12,39 @@
       <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
       <span style="color:red">Ya</span>tube
     </a>
-
-      
-    {% with request.resolver_match.view_name as view_name %}  
+    {% with request.resolver_match.view_name as view_name %}
     <ul class="nav nav-pills">
-    <form class="navbar-brand" action="{% url 'posts:index' %}">
-      <li class="nav-item">
-        <input class="form-control" type="search" placeholder="Поиск по постам" aria-label="Search" name="search">
-      </li>
+      <form class="navbar-brand" action="{% url 'posts:index' %}">
+        <li class="nav-item">
+          <input class="form-control" type="search" placeholder="Поиск по постам" aria-label="Search" name="search">
+        </li>
 
+        <li class="nav-item">
+          <button class="btn btn-primary" type="submit">Поиск</button>
+        </li>
+      </form>
       <li class="nav-item">
-        <button class="btn btn-primary" type="submit">Поиск</button>
-      </li> 
-    </form>
-      <li class="nav-item">
-        <a class="nav-link {% if view_name  == 'about:author' %}active{% endif %}" 
-        href="{% url 'about:author' %}">
+        <a class="nav-link {% if view_name  == 'about:author' %}active{% endif %}" href="{% url 'about:author' %}">
           Об авторе
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {% if view_name  == 'about:tech' %}active{% endif %}" 
-        href="{% url 'about:tech' %}">
+        <a class="nav-link {% if view_name  == 'about:tech' %}active{% endif %}" href="{% url 'about:tech' %}">
           Технологии
         </a>
       </li>
-
-
       {% endwith %}
-      
       {% if user.is_authenticated %}
-     {% with url_name=request.resolver_match.url_name %} 
+      {% with url_name=request.resolver_match.url_name %}
       <li class="nav-item">
-        <a class="nav-link {% if url_name  == 'create_post' %}active{% endif %}" 
-        href="{% url 'posts:create_post' %}">
+        <a class="nav-link {% if url_name  == 'create_post' %}active{% endif %}" href="{% url 'posts:create_post' %}">
           Новая запись
         </a>
       </li>
-       
       <li class="nav-item">
         <a class="nav-link {% if url_name  == 'password_change' %}active{% endif %}"
-        href="{% url 'users:password_change' %}">
-        Изменить пароль
+          href="{% url 'users:password_change' %}">
+          Изменить пароль
         </a>
       </li>
       {% endwith %}
@@ -63,9 +54,7 @@
       <li class="h2 text-muted">
         {{ user.username }}
       </li>
-
       {% else %}
-
       <li class="nav-item">
         <a class="nav-link link-light" href="{% url 'users:login' %}">
           Войти
@@ -75,7 +64,6 @@
         <a class="nav-link link-light " href="{% url 'users:signup' %}">Регистрация</a>
       </li>
       {% endif %}
-      
     </ul>
   </div>
 </nav>

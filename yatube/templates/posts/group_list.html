@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
-
 {% block title %}{{ group.title }}{% endblock %}
-
 {% block header %}<h1>{{ group.title }}</h1>{% endblock %} 
-
-
 {% block content %}
 <p>{{ group.description }}</p>
 {% for post in page_obj %}
@@ -16,7 +12,5 @@
   {% endif %}  
   {% if not forloop.last %}<hr>{% endif %}
 {% endfor %} 
-
 {% include 'posts/includes/paginator.html' %}
-
 {% endblock %} 

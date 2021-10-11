@@ -14,7 +14,6 @@
     <div class="col-md-9 p-5">
       <div class="card">
         <div class="card-header">
-
           {% load user_filters%}
           {% if not post %}
           Новый пост
@@ -26,7 +25,6 @@
           <form method="post" enctype="multipart/form-data"
             action={% if post %}"{% url 'posts:post_edit' post_id=post.pk %}"{% else %}"{% url 'posts:create_post' %}"{% endif %}>
             {% csrf_token %}
-
             {% for field in form %}
             <div class="form-group">
               {% if fields.errors %}
