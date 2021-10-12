@@ -108,12 +108,3 @@ class PostModelTests(TestCase):
                 author=self.author,
             ).exists()
         )
-
-    def test_cache(self):
-        response_before = self.authorized_client.get(reverse('posts:index'))
-        Post.objects.create(text='Тестовый текст', author=self.author)
-        response_after = self.authorized_client.get(reverse('posts:index'))
-        self.assertEqual(response_before.content, response_after.content)
-        cache.clear()
-        response = self.authorized_client.get(reverse('posts:index'))
-        self.assertNotEqual(response_before.content, response.content)

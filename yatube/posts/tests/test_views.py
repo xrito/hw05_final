@@ -56,6 +56,7 @@ class PostPagesTests(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username='user')
         self.client.force_login(self.user)
+        self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.author)
 
@@ -137,11 +138,14 @@ class PostPagesTests(TestCase):
     def test_follow(self):
         self.response = (self.client.get(
             reverse('posts:profile_follow', args={self.author})))
-
         self.assertIs(
             Follow.objects.filter(user=self.user, author=self.author).exists(),
             True
         )
+
+    def test_unfollow(self):
+        self.response = (self.client.get(
+            reverse('posts:profile_follow', args={self.author})))
         self.response = (self.client.get(
             reverse('posts:profile_unfollow', args={self.author})))
         self.assertIs(
@@ -149,11 +153,12 @@ class PostPagesTests(TestCase):
             False
         )
 
-    def test_new_post_for_follow(self):
+    def test_new_post_for_follow_authorized_client(self):
         Follow.objects.create(user=self.user, author=self.author)
         response = (self.client.get(reverse('posts:follow_index')))
         self.assertIn(self.post, response.context['page_obj'])
-        self.client.logout()
+
+    def test_new_post_for_follow_guest_client(self):
         User.objects.create_user(username='user_test', password='pass')
         self.client.login(username='user_test', password='pass')
         response = (self.client.get(reverse('posts:follow_index')))
@@ -167,13 +172,23 @@ class PostPagesTests(TestCase):
         response = (self.client.get(
             reverse('posts:post_detail', kwargs={'post_id': self.post.id})))
         self.assertContains(response, comment)
-        self.client.logout()
-        response = (self.client.post(
+
+    def test_comment_post_guest_user(self):
+        response = (self.guest_client.post(
             reverse('posts:add_comment', kwargs={'post_id': self.post.id})))
         self.assertRedirects(response, reverse(
             'users:login') + '?next=' + reverse(
                 'posts:add_comment',
             kwargs={'post_id': self.post.id}))
+
+    def test_cache(self):
+        response_before = self.authorized_client.get(reverse('posts:index'))
+        Post.objects.create(text='Тестовый текст', author=self.author)
+        response_after = self.authorized_client.get(reverse('posts:index'))
+        self.assertEqual(response_before.content, response_after.content)
+        cache.clear()
+        response = self.authorized_client.get(reverse('posts:index'))
+        self.assertNotEqual(response_before.content, response.content)
 
 
 class PaginatorViewsTest(TestCase):

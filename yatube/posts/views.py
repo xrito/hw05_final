@@ -2,11 +2,13 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.cache import cache_page
 
 from .forms import PostForm, CommentForm
 from .models import Group, Post, User, Follow
 
 
+@cache_page(20)
 def index(request):
     search = request.GET.get('search', '')
     if search:
@@ -127,10 +129,6 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
-    follow = Follow.objects.filter(
-        user=request.user, author=author).exists()
-    if follow or author == request.user:
-        return redirect('posts:profile', username=request.user)
     Follow.objects.get_or_create(user=request.user, author=author)
     return redirect('posts:profile', username=author)
 
@@ -138,7 +136,7 @@ def profile_follow(request, username):
 @login_required
 def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
-    obj, created = Follow.objects.get_or_create(
+    obj = Follow.objects.get(
         user=request.user, author=author)
     obj.delete()
     return redirect('posts:profile', username=author)
