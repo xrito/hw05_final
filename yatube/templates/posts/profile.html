@@ -6,11 +6,12 @@
 {% block content %}
 <div class="mb-5">
   <p>
-    <h1> Все посты пользователя {{ author.get_full_name }} {{ author.username }}</h1>
+    <h1> Все посты пользователя {{ author.get_full_name }} </h1>
   </p>
   <p>
     <h3>Всего постов: {{ num_post }} </h3>
   </p>
+  <hr>
   {% if request.user !=  author  %}
   {% if following %}
   <a class="btn btn-lg btn-light" href="{% url 'posts:profile_unfollow' author.username %}" role="button">
@@ -25,12 +26,6 @@
 </div>
 {% for post in page_obj %}
 {% include 'posts/includes/post_list.html' %}
-{% if post.group  %}
-<a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
-{% else %}
-{% endif %}
-{% if not forloop.last %}
-<hr>{% endif %}
 {% endfor %}
 {% include 'posts/includes/paginator.html' %}
 {% endblock %}

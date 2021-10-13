@@ -1,17 +1,35 @@
 {% load thumbnail %}
 <article>
-  <ul>
-    <li>
-      Автор: {{ post.author.get_full_name }} 
-      <a href="{% url 'posts:profile' post.author.username %}">все посты пользователя</a>
-    </li>
-    <li>
-      Дата публикации: {{ post.pub_date|date:"d E Y" }}
-    </li>
-  </ul>
+
+<strong>
+<h3>
+{{ post.text|truncatewords:10 }}
+</strong>
+</h3>
+<p class="text-muted">
+<i>
+  {{ post.pub_date|date:"d E Y" }}
+</i>  
+</p>
+<p>
   {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
     <img class="card-img my-2" src="{{ im.url }}">
   {% endthumbnail %}
-  <p>{{ post.text }}</p>
-  <div class="link-read-post"><a href="{% url 'posts:post_detail' post.pk %}"> подробная информация </a></div>
+</p> 
+<p>
+  {{ post.text|truncatewords:60 }}
+</p>
+<ol>
+<p>
+  <div class="link-read-post" ><a href="{% url 'posts:post_detail' post.pk %}"> Читать дальше...</a></div>
+</p> 
+<p>
+  Автор:<a href="{% url 'posts:profile' post.author.username %}">  {{ post.author.get_full_name }}</a>
+</p>
+  {% if post.group  %}
+     Все записи группы: <a href="{% url 'posts:group_list' post.group.slug %}"> {{ post.group.title }} </a>
+  {% else %}
+  {% endif %}  
+</ol>
+{% if not forloop.last %}<hr>{% endif %}
 </article>

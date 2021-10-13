@@ -8,7 +8,7 @@ from .forms import PostForm, CommentForm
 from .models import Group, Post, User, Follow
 
 
-@cache_page(20)
+# @cache_page(20)
 def index(request):
     search = request.GET.get('search', '')
     if search:
