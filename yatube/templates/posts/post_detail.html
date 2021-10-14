@@ -8,47 +8,65 @@
 <div class="container py-5">
   <div class="row">
     <aside class="col-12 col-md-3">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          Дата публикации: {{ post.pub_date|date:"d E Y" }}
-        </li>
-        {% if post.group  %}
-        <li class="list-group-item">
-          Группа: {{ post.group.title }}
-          {% else %}
-          {% endif %}
-          {% if post.group  %}
-          <p><a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a></p>
-          {% else %}
-          {% endif %}
-        </li>
-        <li class="list-group-item">
-          Автор: {{ post.author.get_full_name }}
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          Всего постов автора: <span> {{ count }} </span>
-        </li>
-        <li class="list-group-item">
-          <a href="{% url 'posts:profile' post.author.username %}">
-            все посты пользователя
-          </a>
-        </li>
-      </ul>
+      <div class="card">
+        <div class="card-body">
+          <ul class="list-group list-group-flush ">
+            <li class="list-group-item">
+              Дата публикации: {{ post.pub_date|date:"d E Y" }}
+            </li>
+            <li class="list-group-item">
+              Всего комментариев:
+              {% if post.comments.count > 0 %}
+              <a href="{% url 'posts:post_detail' post.id %}" id="comment_sym{{ post.id }}"  class="badge btn-info float-left mr-2 text-decoration-none text-dark">
+              <span id="comment_val{{ post.id }}">{{post.comments.count}}</span>
+              </a>
+              {% else %}
+              <a href="{% url 'posts:post_detail' post.id %}" id="comment_sym{{ post.id }}"  class="badge btn-secondary float-left mr-2 text-decoration-none">
+              <span id="comment_val{{ post.id }}">{{post.comments.count}}</span>
+              </a>
+              {% endif %}
+            </li>
+            {% if post.group  %}
+            <li class="list-group-item">
+              Группа: {{ post.group.title }}
+              {% else %}
+              {% endif %}
+              {% if post.group  %}
+              <p><a href="{% url 'posts:group_list' post.group.slug %}" class="text-decoration-none">все записи
+                  группы</a></p>
+              {% else %}
+              {% endif %}
+            </li>
+            <li class="list-group-item">
+              Автор: {{ post.author.get_full_name }}
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Всего постов автора: <span class="badge bg-info text-dark"> {{ count }} </span>
+            </li>
+            <li class="list-group-item">
+              <a href="{% url 'posts:profile' post.author.username %}" class="text-decoration-none">
+                все посты пользователя
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </aside>
     <article class="col-12 col-md-9">
-      {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+      <h2>{{ post.text|truncatewords:10 }}</h2>
+      <hr>
+      {% thumbnail post.image "960x500" crop="center" upscale=True as im %}
       <img class="card-img my-2" src="{{ im.url }}">
       {% endthumbnail %}
       <p>
         <h6>
-          {{ post.text}}
+          {{ post.text|linebreaks}}
         </h6>
       </p>
       <hr>
       {% if post.author == user %}
       <a class="btn btn-primary" href="{% url 'posts:post_edit' post.pk %}">Редактировать запись</a>
       {% else %}
-      Только автор поста может редактировать запись
       {% endif %}
       {% if user.is_authenticated %}
       <div class="card my-4">
@@ -64,20 +82,31 @@
         </div>
       </div>
       {% endif %}
+      <h3>Комментарии
+
+      </h3>
       {% for comment in comments %}
       <div class="media mb-4">
         <div class="media-body">
-          <h5 class="mt-0">
-            <a href="{% url 'posts:profile' comment.author.username %}">
-              {{ comment.author.username }}
-            </a>
-            <small>{{ comment.created|date:"d E Y" }}</small>
-          </h5>
-          <p>
-            {{ comment.text }}
-          </p>
-          <hr>
-          {% endfor %}
+            <div class="row justify-content-md-center">
+              <div class="col">
+                <h5 class="mt-0">
+                  <a href="{% url 'posts:profile' comment.author.username %}" class="text-decoration-none">
+                    {{ comment.author.username }}
+                  </a>
+                </h5>
+              </div>
+              <div class="col-md-auto">
+              <i>
+                <small class="text-muted">{{ comment.created|date:"d E Y" }}</small>
+              </i>  
+              </div>
+            </div>
+            <p>
+              {{ comment.text }}
+            </p>
+            <hr>
+            {% endfor %}
     </article>
   </div>
 </div>

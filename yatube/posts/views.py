@@ -30,11 +30,21 @@ def group_posts(request, slug):
     paginator = Paginator(group_list, settings.PAGE_POST)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    count = group.posts.filter(group=group).count()
     context = {
         'group': group,
+        'count': count,
         'page_obj': page_obj,
     }
     return render(request, 'posts/group_list.html', context)
+
+
+def groups(request):
+    group_list = Group.objects.all()
+    context = {
+        'group_list': group_list
+    }
+    return render(request, 'posts/groups.html', context)
 
 
 @login_required

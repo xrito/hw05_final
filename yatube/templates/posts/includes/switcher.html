@@ -18,6 +18,14 @@
           Избранные авторы
         </a>
       </li>
+      <li class="nav-item">
+        <a 
+           class="nav-link {% if url_name == 'groups' %} active {% endif %}"
+           href="{% url 'posts:groups' %}"
+        >
+          Сообщества
+        </a>
+      </li>      
       {% endwith %}
     </ul>
     </div>

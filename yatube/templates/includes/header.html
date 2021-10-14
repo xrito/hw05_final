@@ -1,6 +1,7 @@
 {% load static %}
 <nav class="navbar navbar-light nav-top-menu" style="background-color: lightskyblue">
-  <div class="container">
+
+  <div class="container flex-column flex-lg-row ms-auto">
     <a class="navbar-brand" href="{% url 'posts:index' %}">
       <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt>
       <span style="color:red">Ya</span>tube
@@ -13,7 +14,7 @@
       }
     </style>
     {% with request.resolver_match.view_name as view_name %}
-    <ul class="nav nav-pills flex-column flex-lg-row  ms-auto">
+    <ul class="nav nav-pills flex-column flex-lg-row ms-auto">
       <form class="navbar-brand" action="{% url 'posts:index' %}">
         <li class="nav-item">
           <input class="form-control" type="search" placeholder="Поиск по постам" aria-label="Search" name="search">
@@ -40,18 +41,15 @@
           Новая запись
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link {% if url_name  == 'password_change' %}active{% endif %}"
-          href="{% url 'users:password_change' %}">
-          Изменить пароль
-        </a>
-      </li>
       {% endwith %}
-      <li class="nav-item">
-        <a class="nav-link link-light" href="{% url 'users:logout' %}">Выйти</a>
-      </li>
-      <li class="h2 text-muted">
-        {{ user.username }}
+       <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ user.username }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="{% url 'users:password_change' %}">Изменить пароль</a></li>
+            <li><a class="dropdown-item" href="{% url 'users:logout' %}">Выйти</a></li>
+          </ul>
       </li>
       {% else %}
       <li class="nav-item">

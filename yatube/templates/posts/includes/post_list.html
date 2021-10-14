@@ -1,35 +1,59 @@
 {% load thumbnail %}
 <article>
-
-<strong>
-<h3>
-{{ post.text|truncatewords:10 }}
-</strong>
-</h3>
-<p class="text-muted">
-<i>
-  {{ post.pub_date|date:"d E Y" }}
-</i>  
-</p>
-<p>
-  {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
-    <img class="card-img my-2" src="{{ im.url }}">
-  {% endthumbnail %}
-</p> 
-<p>
-  {{ post.text|truncatewords:60 }}
-</p>
-<ol>
-<p>
-  <div class="link-read-post" ><a href="{% url 'posts:post_detail' post.pk %}"> Читать дальше...</a></div>
-</p> 
-<p>
-  Автор:<a href="{% url 'posts:profile' post.author.username %}">  {{ post.author.get_full_name }}</a>
-</p>
-  {% if post.group  %}
-     Все записи группы: <a href="{% url 'posts:group_list' post.group.slug %}"> {{ post.group.title }} </a>
-  {% else %}
-  {% endif %}  
-</ol>
-{% if not forloop.last %}<hr>{% endif %}
+  <div class="shadow-lg p-3 mb-5 bg-white rounded">
+    <strong>
+      <h3>
+        {{ post.text|truncatewords:10 }}
+    </strong>
+    </h3>
+    <p class="text-muted">
+      <i>
+        {{ post.pub_date|date:"d E Y" }}
+      </i>
+    </p>
+    <strong>
+      <a href="{% url 'posts:profile' post.author.username %}" class="text-decoration-none">
+        @{{ post.author.username }}</a>
+    </strong>
+    {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+    <a href="{% url 'posts:post_detail' post.pk %}"><img class="card-img my-2" src="{{ im.url }}"></a>
+    {% endthumbnail %}
+    {{ post.text|truncatewords:60 }}
+    <p>
+      <div class="container px-0">
+        <div class="row justify-content-md-center">
+          <div class="col">
+            {% if post.group  %}
+            <strong>
+              <a href="{% url 'posts:group_list' post.group.slug %}" class="text-decoration-none">
+                #{{ post.group.title }}
+              </a>
+            </strong>
+            {% else %}
+            {% endif %}
+          </div>
+          <div class="col-md-auto">
+            <strong>
+              <div class="link-read-post"><a href="{% url 'posts:post_detail' post.pk %}"
+                  class="text-decoration-none text-muted"> Читать дальше...</a></div>
+            </strong>
+          </div>
+        </div>
+      </div>
+      <div class="text-muted">
+      <small>
+        Всего комментариев:
+        </small>
+        {% if post.comments.count > 0 %}
+        <a href="{% url 'posts:post_detail' post.id %}" id="comment_sym{{ post.id }}" class="text-decoration-none">
+          <span class="text-muted" id="comment_val{{ post.id }}">{{post.comments.count}}</span>
+        </a>
+        {% else %}
+        <a href="{% url 'posts:post_detail' post.id %}" id="comment_sym{{ post.id }}" class="text-decoration-none">
+          <span class="text-muted" id="comment_val{{ post.id }}">{{post.comments.count}}</span>
+        </a>
+        {% endif %}
+    </p>
+  </div>
+  </div>
 </article>
