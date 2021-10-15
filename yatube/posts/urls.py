@@ -11,6 +11,7 @@ urlpatterns = [
     path('group/<slug:slug>/', views.group_posts, name='group_list'),
     path('create/', views.post_create, name='create_post'),
     path('posts/<int:post_id>/edit/', views.post_edit, name='post_edit'),
+    path('posts/<int:post_id>/delete/', views.post_delete, name='post_delete'),
     path('posts/<int:post_id>/comment', views.add_comment, name='add_comment'),
     path('follow/', views.follow_index, name='follow_index'),
     path('profile/<str:username>/follow/',

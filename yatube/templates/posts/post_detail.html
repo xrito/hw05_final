@@ -17,14 +17,19 @@
             <li class="list-group-item">
               Всего комментариев:
               {% if post.comments.count > 0 %}
-              <a href="{% url 'posts:post_detail' post.id %}" id="comment_sym{{ post.id }}"  class="badge btn-info float-left mr-2 text-decoration-none text-dark">
-              <span id="comment_val{{ post.id }}">{{post.comments.count}}</span>
+              <a href="{% url 'posts:post_detail' post.id %}" id="comment_sym{{ post.id }}"
+                class="badge btn-info float-left mr-2 text-decoration-none text-dark">
+                <span id="comment_val{{ post.id }}">{{post.comments.count}}</span>
               </a>
               {% else %}
-              <a href="{% url 'posts:post_detail' post.id %}" id="comment_sym{{ post.id }}"  class="badge btn-secondary float-left mr-2 text-decoration-none">
-              <span id="comment_val{{ post.id }}">{{post.comments.count}}</span>
+              <a href="{% url 'posts:post_detail' post.id %}" id="comment_sym{{ post.id }}"
+                class="badge btn-secondary float-left mr-2 text-decoration-none">
+                <span id="comment_val{{ post.id }}">{{post.comments.count}}</span>
               </a>
               {% endif %}
+            </li>
+            <li class="list-group-item">
+              Просмотры : {{post.post_views}}
             </li>
             {% if post.group  %}
             <li class="list-group-item">
@@ -66,6 +71,23 @@
       <hr>
       {% if post.author == user %}
       <a class="btn btn-primary" href="{% url 'posts:post_edit' post.pk %}">Редактировать запись</a>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Удалить запись
+      </button>
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Вы точно хотите удалить запись?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+              <a class="btn btn-primary" href="{% url 'posts:post_delete' post.pk %}">Да</a>
+            </div>
+          </div>
+        </div>
+      </div>
       {% else %}
       {% endif %}
       {% if user.is_authenticated %}
@@ -82,31 +104,29 @@
         </div>
       </div>
       {% endif %}
-      <h3>Комментарии
-
-      </h3>
+      <h3>Комментарии</h3>
       {% for comment in comments %}
       <div class="media mb-4">
         <div class="media-body">
-            <div class="row justify-content-md-center">
-              <div class="col">
-                <h5 class="mt-0">
-                  <a href="{% url 'posts:profile' comment.author.username %}" class="text-decoration-none">
-                    {{ comment.author.username }}
-                  </a>
-                </h5>
-              </div>
-              <div class="col-md-auto">
+          <div class="row justify-content-md-center">
+            <div class="col">
+              <h5 class="mt-0">
+                <a href="{% url 'posts:profile' comment.author.username %}" class="text-decoration-none">
+                  {{ comment.author.username }}
+                </a>
+              </h5>
+            </div>
+            <div class="col-md-auto">
               <i>
                 <small class="text-muted">{{ comment.created|date:"d E Y" }}</small>
-              </i>  
-              </div>
+              </i>
             </div>
-            <p>
-              {{ comment.text }}
-            </p>
-            <hr>
-            {% endfor %}
+          </div>
+          <p>
+            {{ comment.text }}
+          </p>
+          <hr>
+          {% endfor %}
     </article>
   </div>
 </div>

@@ -1,20 +1,28 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 {% block title %}Технологии{% endblock %}
 {% block content %}
 <div class="row">
-  <h1>Вот что я умею</h1>
+  <h1>Технологии</h1>
   <aside class="col-12 col-md-3">
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
-        Python
+        Python 3.9
       </li>
       <li class="list-group-item">
-        Django
+        Django 2.2
+      </li>
+            <li class="list-group-item">
+        Html 5
+      </li>
+            <li class="list-group-item">
+        CSS | Bootstrap 4
       </li>
     </ul>
   </aside>
   <article class="col-12 col-md-9">
-    <p>Текст страницы "Технологии"</p>
+    <p>Django (Джанго) — свободный фреймворк для веб-приложений на языке Python, использующий шаблон проектирования MVC. Проект поддерживается организацией Django Software Foundation.</p>
+    <p><img src="/static/img/py_django.jpg" class="img-fluid" alt="Технологии"></p>
   </article>
 </div>
 {% endblock %}

@@ -103,6 +103,9 @@ def post_detail(request, post_id):
     form = CommentForm(request.POST or None)
     comments = post.comments.all()
     count = Post.objects.filter(author=post.author).count()
+    post_object = Post.objects.get(id=post_id)
+    post_object.post_views = post_object.post_views + 1
+    post_object.save()
     context = {
         'post': post,
         'count': count,
@@ -110,6 +113,15 @@ def post_detail(request, post_id):
         'comments': comments,
     }
     return render(request, 'posts/post_detail.html', context)
+
+
+def post_delete(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    if post.author == request.user:
+        post.delete()
+    else:
+        return redirect('users:login')
+    return redirect('posts:profile', username=request.user)
 
 
 @login_required

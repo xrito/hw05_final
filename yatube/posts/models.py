@@ -29,8 +29,10 @@ class Post(models.Model):
         'Картинка',
         upload_to='posts/',
         blank=True,
+        null=True,
         help_text='Загрузите картинку'
     )
+    post_views = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-pub_date']
